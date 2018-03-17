@@ -1,0 +1,32 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+  <title>{% block title %}Inmobiliaria VR{% endblock %}</title>
+
+  <!-- CSS  -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="{% static 'js/jquery.js' %}"></script>
+    <script src="{% static 'js/custom.js' %}"></script>
+    <script src="{% static 'js/materialize.js' %}"></script>
+    <link href="{% static 'css/materialize.css' %}" rel="stylesheet">
+
+</head>
+
+  <nav class="light-blue accent-3" id="cabecera_principal">
+    <div class="nav-wrapper">
+      <a href="{% url 'index'%}" class="brand-logo">{% block title_logo %}Index{% endblock %}</a>
+      <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li><a href="{% url 'index'%}">Home</a></li>
+      </ul>
+       <ul class="side-nav" id="mobile-demo">
+        <li><a href="{% url 'index'%}">Home</a></li>
+      </ul>
+    </div>
+  </nav>
+
+{% block content %}{% endblock %}

@@ -2,3 +2,29 @@
 {% load staticfiles %}
 {% block title %}Inmobiliaria VR{% endblock %}
 {% block title_logo %}Inmobiliaria VR | Index{% endblock %}
+
+{% block content %}
+<!--<iframe width="500" height="500" src="https://proyecto-tfg.glitch.me/"></iframe>-->
+  <div class="row">
+    <form id="form_nueva_casa" class="col s12">
+    {% csrf_token %}
+      <div class="row">
+        <h3>Formulario nueva casa</h3>
+        <div class="input-field col s3">
+          <input placeholder="Nombre de la casa" id="nombre_casa" name="nombre_casa" type="text" class="validate" >
+        </div>
+        <div class="input-field col s3">
+          <input placeholder="Numero de habitaciones" id="numero_habitaciones" name="numero_habitaciones" type="number" class="validate" required>
+        </div>
+      </div>
+      <div class="row input-field col s4">
+          <button class="waves-effect waves-light btn" type="submit">Nueva Casa</button>
+      </div>
+    </form>
+  </div>
+  <div class="row">
+    <form id="form_habitaciones" class="col s12">
+
+    </form>
+  </div>
+{% endblock %}

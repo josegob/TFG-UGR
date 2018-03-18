@@ -15,12 +15,16 @@ $( document ).ready(function(){
                        $('#form_habitaciones').empty();
                        for(i = 0; i < data.habitaciones; i++)
                        {
-                         $("#form_habitaciones").append("<div class='row' <div class='input-field col s3'><input placeholder='Nombre habitacion' id='nombre_habitacion' name='nombre_habitacion' type='text' class='validate'></div><div class='input-field col s3'><input placeholder='Imagen habitacion' id='imagen_habitacion' name='imagen_habitacion' type='text' class='validate'></div></div>");
+                         $("#form_habitaciones").append("<div class='row' id=row"+i+" </div>");
+                       }
+                       for(i = 0; i < data.habitaciones; i++)
+                       {
+                         $("#row"+i).append("<div class='input-field col s3'><input placeholder='Nombre habitacion' id='nombre_habitacion' name='nombre_habitacion' type='text' class='validate'></div><div class='input-field col s3'><input placeholder='Imagen habitacion' id='imagen_habitacion' name='imagen_habitacion' type='text' class='validate'></div>");
                        }
                     }
                     else
                     {
-                       alert("Revisa el formulario");
+                       alert(data.mensaje);
                     }
                 }
         });

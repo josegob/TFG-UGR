@@ -15,6 +15,12 @@ class Habitacion(models.Model):
     link_habitacion = models.CharField(max_length=100)
     imagen_habitacion = models.FileField()
 
+    def __str__(self):
+        return self.name
+
+    def get_link(self):
+        return self.content.url 
+
 
 class BotonLink(models.Model):
     nombre_boton = models.CharField(max_length=100)

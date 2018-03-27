@@ -11,10 +11,10 @@
       <div class="row">
         <h3>Formulario nueva casa</h3>
         <div class="input-field col s3">
-          <input placeholder="Nombre de la casa" id="nombre_casa" name="nombre_casa" type="text" class="validate" >
+          <input placeholder="Nombre de la casa" id="nombre_casa" name="nombre_casa" type="text" class="validate" required>
         </div>
         <div class="input-field col s3">
-          <input placeholder="Numero de habitaciones" id="numero_habitaciones" name="numero_habitaciones" type="file" class="validate" required>
+          <input placeholder="Numero de habitaciones" id="numero_habitaciones" name="numero_habitaciones" type="number" min="1" class="validate" required>
         </div>
       </div>
       <div class="row input-field col s4">
@@ -23,8 +23,9 @@
     </form>
   </div>
   <div class="row">
-    <form id="form_habitaciones" class="col s12">
-
+    <form id="form_habitaciones" class="col s12" enctype="multipart/form-data">
+      {% csrf_token %}
     </form>
+
   </div>
 {% endblock %}

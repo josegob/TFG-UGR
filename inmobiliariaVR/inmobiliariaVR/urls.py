@@ -19,9 +19,16 @@ from django.conf.urls import url
 from django.conf.urls.static import static
 from django.conf import settings
 from . import views
+from .views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^appVR/', include('appVR.urls')),
     url(r'^$', views.main_page, name='index'),
+    url(r'^sample/(?P<path>.*)/$', views.sample, name='sample'),
+    url(r'^previa-habitaciones/$', views.previa, name='previa'),
+    url(r'^get-habitaciones/$', GetHabitaciones.as_view(), name='get_habitaciones'),
+    url(r'^get-links/$', GetLinkHabitacion.as_view(), name='get_links'),
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

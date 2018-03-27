@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib import admin
 # Create your models here.
 
 
@@ -7,29 +7,30 @@ class Casa(models.Model):
     nombre_casa = models.CharField(max_length=100)
     numero_habitaciones = models.IntegerField()
 
-
-class Habitacion(models.Model):
-    nombre_casa = models.CharField(max_length=100)
-    nombre_habitacion = models.CharField(max_length=100)
-    nombre_boton = models.CharField(max_length=100)
-    link_habitacion = models.CharField(max_length=100)
-    imagen_habitacion = models.FileField()
-
-    def __str__(self):
-        return self.name
-
-    def get_link(self):
-        return self.content.url 
+class CasasAdmin(admin.ModelAdmin):
+    list_display = ('nombre_casa', )
 
 
 class BotonLink(models.Model):
     nombre_boton = models.CharField(max_length=100)
     nombre_habitacion = models.CharField(max_length=100)
 
-    coordenada_x_position = models.IntegerField()
-    coordenada_y_position = models.IntegerField()
-    coordenada_z_position = models.IntegerField()
+    coordenada_x_position = models.FloatField()
+    coordenada_y_position = models.FloatField()
+    coordenada_z_position = models.FloatField()
 
-    coordenada_x_rotation = models.IntegerField()
-    coordenada_y_rotation = models.IntegerField()
-    coordenada_z_rotation = models.IntegerField()
+    coordenada_x_rotation = models.FloatField()
+    coordenada_y_rotation = models.FloatField()
+    coordenada_z_rotation = models.FloatField()
+
+
+class ImagenesHabitaciones(models.Model):
+    imagen_habitacion = models.FileField()
+    nombre_habitacion = models.CharField(max_length=100)
+    nombre_casa = models.CharField(max_length=100)
+
+    def get_download_link(self):
+        return self.imagen_habitacion.url
+
+class ImagenesHabitacionesAdmin(admin.ModelAdmin):
+    list_display = ('nombre_casa', )

@@ -26,9 +26,12 @@ urlpatterns = [
     url(r'^appVR/', include('appVR.urls')),
     url(r'^$', views.main_page, name='index'),
     url(r'^sample/(?P<path>.*)/$', views.sample, name='sample'),
-    url(r'^previa-habitaciones/$', views.previa, name='previa'),
+    url(r'^testing-habitaciones/$', views.testing, name='testing'),
     url(r'^get-habitaciones/$', GetHabitaciones.as_view(), name='get_habitaciones'),
     url(r'^get-links/$', GetLinkHabitacion.as_view(), name='get_links'),
+    url(r'^previa-habitaciones/$', views.previa, name='previa'),
+    url(r'^sample-buttons/(?P<path>.*)/(?P<casa>.*)/(?P<habitacion>.*)/$', views.sample_butons, name='sample_buttons'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += static(settings.TMP_URL, document_root=settings.TMP_ROOT)

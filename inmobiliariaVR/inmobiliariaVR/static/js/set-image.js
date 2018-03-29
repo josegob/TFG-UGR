@@ -9,14 +9,6 @@ var rotation = new THREE.Vector3();
 var position = new THREE.Vector3();
 var distance = 8.0;
 
-function vector3ToSphericalCoords(vector) {
-  var phi = Math.acos(vector.y / Math.sqrt(vector.x * vector.x + vector.y * vector.y + vector.z * vector.z));
-  var theta = Math.atan2(vector.x, vector.z);
-  return {
-    longitude: theta < 0 ? -theta : (Math.PI * 2.0) - theta,
-    latitude: (Math.PI / 2.0) - phi
-  };
-};
 
 AFRAME.registerComponent('set-image', {
   schema: {
@@ -34,10 +26,22 @@ AFRAME.registerComponent('set-image', {
 
     el.addEventListener(data.on, function () {
       // Fade out image.
+      var habitacion = data.src.substring(1);
+      $('#hab_actual').attr('name', habitacion);
       data.target.emit('set-image-fade');
       // Wait for fade to complete.
       setTimeout(function () {
         // Set image.
+        var tope = ($("#hab_actual").val());
+
+        for(var i = 0; i < tope; i++)
+        {
+            var tmp = $("#links"+i).attr('name');
+            if (habitacion != tmp)
+                $("#links"+i).attr('visible', false);
+            else
+                $("#links"+i).attr('visible', true);
+        }
         data.target.setAttribute('material', 'src', data.src);
       }, data.dur);
     });
@@ -82,8 +86,8 @@ AFRAME.registerComponent('rotation-reader', {
       tick: function () {
         rotation = this.el.getAttribute('rotation');
         position = this.el.getAttribute('position');
-        var asaad = vector3ToSphericalCoords(rotation);
-        //console.log(position);
+        num_t = $("#hab_actual").attr('value')
+
         $("#coordenadas").attr('rotation_x', rotation.x);
         $("#coordenadas").attr('rotation_y', rotation.y);
         $("#coordenadas").attr('rotation_z', rotation.z);
@@ -100,7 +104,20 @@ AFRAME.registerComponent('rk', {
         posision = posision.normalize();
         posision = new THREE.Vector3(posision.x*distance, posision.y*distance, posision.z*distance);
 
-        console.log(posision);
+        //console.log(posision);
+        $("#coordenadas").attr('position_x', posision.x);
+        $("#coordenadas").attr('position_y', posision.y);
+        $("#coordenadas").attr('position_z', posision.z);
+
+
+      }
+});
+
+AFRAME.registerComponent('aaa', {
+      tick: function () {
+        name = this.el.getAttribute('material');
+            //console.log(name);
+
 
 
       }

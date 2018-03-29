@@ -4,7 +4,6 @@
 {% block title_logo %}Inmobiliaria VR | Previa{% endblock %}
 
 {% block content %}
-<!--<iframe width="500" height="500" src="https://proyecto-tfg.glitch.me/"></iframe>-->
   <div class="row">
     <form id="form_seleccion_casa" class="col s6">
     {% csrf_token %}
@@ -18,7 +17,7 @@
       <button class="waves-effect waves-light btn" type="submit">Seleccionar</button>
       </div>
     </form>
-    <form id="form_seleccion_habitacion" class="col s6">
+    <form id="form_seleccion_habitacion_previa" class="col s6">
     {% csrf_token %}
       <div style="visibility:hidden;" id="div_habitaciones" class="input-field col s12">
         <select id="habitacion_seleccionada" name="habitacion_seleccionada">
@@ -33,34 +32,5 @@
         <div class="col s6">
           <iframe id="iframe_test" width="1000" height="500"></iframe>
         </div>
-  </div>
-    <div style="visibility:hidden;" id="div_coordenadas" class="row">
-      <form id="form_coordenadas" name="form_coordenadas" class="col s12">
-      {% csrf_token %}
-        <div class="input-field col s3">
-            <input placeholder="Coord X Position" id="coord_x_p" name="coord_x_p" type="number">
-        </div>
-        <div class="input-field col s3">
-            <input placeholder="Coord Y Position" id="coord_y_p" name="coord_y_p" type="number">
-        </div>
-        <div class="input-field col s3">
-            <input placeholder="Coord Z Position" id="coord_z_p" name="coord_z_p" type="number">
-        </div>
-        <div class="input-field col s3">
-            <input placeholder="Nombre Boton" id="nombre_boton" name="nombre_boton" type="text">
-        </div>
-        <div class="input-field col s3">
-            <input placeholder="Coord X Rotation" id="coord_x_r" name="coord_x_r" type="text">
-        </div>
-        <div class="input-field col s3">
-            <input placeholder="Coord Y Rotation" id="coord_y_r" name="coord_y_r" type="text">
-        </div>
-        <div class="input-field col s3">
-            <input placeholder="Coord Z Rotation" id="coord_z_r" name="coord_z_r" type="text">
-        </div>
-        <div class="input-field col s3">
-            <button class="waves-effect waves-light btn" type="submit">Aceptar</button>
-        </div>
-      </form>
   </div>
 {% endblock %}

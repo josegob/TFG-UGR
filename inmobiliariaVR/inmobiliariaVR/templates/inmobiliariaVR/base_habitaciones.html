@@ -1,0 +1,23 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+  <title>{% block title %}{% endblock %}</title>
+  <script src="https://aframe.io/releases/0.5.0/aframe.min.js"></script>
+  <script src="https://npmcdn.com/aframe-animation-component@3.0.1"></script>
+  <script src="https://npmcdn.com/aframe-event-set-component@3.0.1"></script>
+  <script src="https://npmcdn.com/aframe-layout-component@3.0.1"></script>
+  <script src="https://npmcdn.com/aframe-template-component@3.1.1"></script>
+  <script src="{% static 'js/jquery.js' %}"></script>
+  <script src="{% static 'js/materialize.js' %}"></script>
+  <script src="{% static 'js/set-image.js' %}"></script>
+  <script src="{% static 'js/custom.js' %}"></script>
+
+</head>
+
+
+
+{% block content %}{% endblock %}

@@ -1,6 +1,9 @@
 $( document ).ready(function(){
   $(".button-collapse").sideNav();
   $('select').material_select();
+  var casa_seleccionada;
+  var habitacion_select;
+  var array_habitaciones = new Array();
 
     $("#form_nueva_casa").on("submit", function(event){
     event.preventDefault();
@@ -50,9 +53,17 @@ $( document ).ready(function(){
             processData: false,
             dataType: 'json',
                 success: function (data) {
-                    $('#form_nueva_casa')[0].reset();
-                    $('#form_habitaciones').empty();
-                    alert(data.message);
+                    if(data.creada)
+                    {
+                        $('#form_nueva_casa')[0].reset();
+                        $('#form_habitaciones').empty();
+                        alert(data.message);
+                    }
+                    else
+                    {
+                        alert(data.message);
+                    }
+
                 }
         });
     });
@@ -91,6 +102,8 @@ $( document ).ready(function(){
                        $("#habitacion_seleccionada").append("<option disabled selected value>Selecciona una habitacion</option>");
                         for(i = 0; i < (data.habitaciones).length; i++)
                         {
+                            array_habitaciones.push(data.habitaciones[i])
+                            var tmp = data.habitaciones[i]
                             $("#habitacion_seleccionada").append("<option value="+data.habitaciones[i]+">"+data.habitaciones[i]+"</option>");
                             $('select').material_select();
                         }
@@ -109,7 +122,10 @@ $( document ).ready(function(){
 
     $("#form_seleccion_habitacion").on("submit", function(event){
         event.preventDefault();
+        habitacion_select = $('#habitacion_seleccionada').parent(["0"]).children()[1].value;
+        console.log(habitacion_select);
         var form = $(this).closest("form");
+        $('#habitacion_seleccionada_2').empty();
 
         $.ajax({
             type: "POST",
@@ -121,7 +137,15 @@ $( document ).ready(function(){
                     {
                         $("#div_iframe").removeAttr("style");
                         $("#div_coordenadas").removeAttr("style");
+                        $("#form_coordenadas").append("<input type='hidden' id='casa_seleccionada_3' name='casa_seleccionada_3' value='"+casa_seleccionada+"'>");
+                        $("#form_coordenadas").append("<input type='hidden' id='habitacion_select_2' name='habitacion_select_2' value='"+habitacion_select+"'>");
                         $("#iframe_test").attr('src', 'http://127.0.0.1:8000/sample/'+data.link);
+
+                        for(i = 0; i < (array_habitaciones).length; i++)
+                        {
+                            $("#habitacion_seleccionada_2").append("<option value="+array_habitaciones[i]+">"+array_habitaciones[i]+"</option>");
+                            $('select').material_select();
+                        }
 
                     }
                     else
@@ -132,7 +156,7 @@ $( document ).ready(function(){
         });
     });
 
-    $("#form_coordenadas").on("submit", function(event){
+    $("#coor_previas").on("click", function(event){
         event.preventDefault();
 
         var link = $("#iframe_test");
@@ -140,8 +164,61 @@ $( document ).ready(function(){
         $("#coord_y_r").val($("#coordenadas", link.contents()).attr('rotation_y'));
         $("#coord_z_r").val($("#coordenadas", link.contents()).attr('rotation_z'));
 
+        $("#coord_x_p").val($("#coordenadas", link.contents()).attr('position_x'));
+        $("#coord_y_p").val($("#coordenadas", link.contents()).attr('position_y'));
+        $("#coord_z_p").val($("#coordenadas", link.contents()).attr('position_z'));
+
 
     });
 
+    $("#form_coordenadas").on("submit", function(event){
+        event.preventDefault();
+        var form = $(this).closest("form");
+
+        $.ajax({
+            type: "POST",
+            url: "/appVR/guardar-boton/",
+            data: form.serialize(),
+            dataType: 'json',
+                success: function (data) {;
+                    if(data.creado)
+                    {
+                        $('#form_coordenadas')[0].reset();
+                        alert(data.mensaje);
+                    }
+                    else
+                    {
+                        alert(data.mensaje);
+                    }
+                }
+        });
+
+
+    });
+
+    $("#form_seleccion_habitacion_previa").on("submit", function(event){
+        event.preventDefault();
+        var form = $(this).closest("form");
+        habitacion_select = $('#habitacion_seleccionada').val();
+
+        $.ajax({
+            type: "POST",
+            url: "/get-links/",
+            data: form.serialize(),
+            dataType: 'json',
+                success: function (data) {;
+                    if(data.seleccionada)
+                    {
+                        $("#div_iframe").removeAttr("style");
+                        $("#iframe_test").attr('src', 'http://127.0.0.1:8000/sample-buttons/'+data.link+'/'+casa_seleccionada+'/'+habitacion_select);
+
+                    }
+                    else
+                    {
+                        alert(data.mensaje)
+                    }
+                }
+        });
+    });
 
 });

@@ -6,7 +6,32 @@
 {% block content %}
 <!--<iframe width="500" height="500" src="https://proyecto-tfg.glitch.me/"></iframe>-->
   <div class="row">
-    <form id="form_nueva_casa" class="col s12">
+      <div class="col s12">
+          <h3>Mis casas</h3>
+          <div class="col s6">
+              <table>
+                <thead>
+                  <tr>
+                      <th>Nombre de la casa</th>
+                      <th>Editar</th>
+                      <th>Eliminar</th>
+                  </tr>
+                </thead>
+
+                <tbody id="tabla_casas">
+                  {% for casa in casas %}
+                      <tr>
+                          <td id="{{forloop.counter0}}">{{casa}}</td>
+                          <td name="{{casa}}"><button id="editar" class="btn waves-effect waves-light boton_tabla">Editar</button></td>
+                          <td name="{{casa}}"><button id="eliminar" class="btn waves-effect waves-light boton_tabla">Eliminar</button></td>
+                      </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+          </div>
+      </div>
+  <div class="col s12">
+    <form id="form_nueva_casa" class="">
     {% csrf_token %}
       <div class="row">
         <h3>Formulario nueva casa</h3>
@@ -21,11 +46,9 @@
           <button class="waves-effect waves-light btn" type="submit">Nueva Casa</button>
       </div>
     </form>
-  </div>
-  <div class="row">
     <form id="form_habitaciones" class="col s12" enctype="multipart/form-data">
       {% csrf_token %}
     </form>
-
   </div>
+ </div>
 {% endblock %}

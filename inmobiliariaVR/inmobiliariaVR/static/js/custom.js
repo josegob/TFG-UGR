@@ -58,6 +58,16 @@ $( document ).ready(function(){
                         $('#form_nueva_casa')[0].reset();
                         $('#form_habitaciones').empty();
                         alert(data.message);
+                        $("#tabla_casas").empty();
+
+                        for(i = 0; i < (data.casas).length; i++)
+                        {
+
+                            $("#tabla_casas").append("<tr><td>"+data.casas[i]+"</td><td id='"+data.casas[i]+"'><button id='editar' class='btn waves-effect waves-light'>Editar</button></td><td name='"+data.casas[i]+"'><button id='eliminar' class='btn waves-effect waves-light'>Eliminar</button></td></tr>");
+                            $( ".boton_tabla" ).on( "click", botonTabla );
+                        }
+
+                        window.location.replace("edicion-habitaciones/"+data.casa_creada+"/");
                     }
                     else
                     {
@@ -104,17 +114,16 @@ $( document ).ready(function(){
                         {
                             array_habitaciones.push(data.habitaciones[i])
                             var tmp = data.habitaciones[i]
-                            $("#habitacion_seleccionada").append("<option value="+data.habitaciones[i]+">"+data.habitaciones[i]+"</option>");
+                            $("#habitacion_seleccionada").append("<option value='"+data.habitaciones[i]+"'>"+data.habitaciones[i]+"</option>");
                             $('select').material_select();
                         }
 
                         $("#div_habitaciones").append("<input type='hidden' id='casa_seleccionada_2' name='casa_seleccionada_2' value='"+casa_seleccionada+"'>");
-                        $("#div_habitaciones").append("<button class='waves-effect waves-light btn' id='button_habitacion' type='submit'>Seleccionar</button>")
 
                     }
                     else
                     {
-                        alert(data.mensaje)
+                        alert(data.mensaje);
                     }
                 }
         });
@@ -141,9 +150,10 @@ $( document ).ready(function(){
                         $("#form_coordenadas").append("<input type='hidden' id='habitacion_select_2' name='habitacion_select_2' value='"+habitacion_select+"'>");
                         $("#iframe_test").attr('src', 'http://127.0.0.1:8000/sample/'+data.link);
 
-                        for(i = 0; i < (array_habitaciones).length; i++)
+                        $("#habitacion_seleccionada_2").append("<option disabled selected value>Selecciona una habitacion</option>");
+                        for(i = 0; i < (data.habitaciones).length; i++)
                         {
-                            $("#habitacion_seleccionada_2").append("<option value="+array_habitaciones[i]+">"+array_habitaciones[i]+"</option>");
+                            $("#habitacion_seleccionada_2").append("<option value='"+data.habitaciones[i]+"'>"+data.habitaciones[i]+"</option>");
                             $('select').material_select();
                         }
 
@@ -210,7 +220,9 @@ $( document ).ready(function(){
                     if(data.seleccionada)
                     {
                         $("#div_iframe").removeAttr("style");
+                        $("#pantalla_completa").removeAttr("style");
                         $("#iframe_test").attr('src', 'http://127.0.0.1:8000/sample-buttons/'+data.link+'/'+casa_seleccionada+'/'+habitacion_select);
+                        $("#href_button").attr('href', 'http://127.0.0.1:8000/sample-buttons/'+data.link+'/'+casa_seleccionada+'/'+habitacion_select);
 
                     }
                     else
@@ -220,5 +232,42 @@ $( document ).ready(function(){
                 }
         });
     });
+
+    function botonTabla() {
+      var casa = (($(this).closest("td")).attr('name'));
+      var accion = ($(this).attr('id'));
+      if (accion == 'eliminar')
+      {
+        $.ajax({
+            type: "POST",
+            url: "/appVR/eliminar-casa/",
+            data: {seleccion: casa},
+            dataType: 'json',
+                success: function (data) {;
+                    $("#tabla_casas").empty();
+
+                    for(i = 0; i < (data.casas).length; i++)
+                    {
+                        $("#tabla_casas").append("<tr><td>"+data.casas[i]+"</td><td name='"+data.casas[i]+"'><button id='editar' class='btn waves-effect waves-light boton_tabla'>Editar</button></td><td name='"+data.casas[i]+"'><button id='eliminar' class='btn waves-effect waves-light boton_tabla'>Eliminar</button></td></tr>");
+                        $( ".boton_tabla" ).on( "click", botonTabla );
+                    }
+
+                }
+        });
+      }
+      else
+      {
+        window.location.replace("edicion-habitaciones/"+casa+"/");
+      }
+    }
+
+    $( ".boton_tabla" ).on( "click", botonTabla );
+    $( ".fin_edicion" ).click(function() {
+      window.location.replace("/");
+    });
+
+    //var d = ($("#iframe_test").attr('src')
+    //var asd = $.get(d);
+    //asd.responseText;
 
 });

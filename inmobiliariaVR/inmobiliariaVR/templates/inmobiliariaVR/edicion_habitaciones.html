@@ -1,12 +1,13 @@
 {% extends "inmobiliariaVR/base.html" %}
 {% load staticfiles %}
 {% block title %}Inmobiliaria VR{% endblock %}
-{% block title_logo %}Inmobiliaria VR | Creacion{% endblock %}
+{% block title_logo %}Inmobiliaria VR | Edicion{% endblock %}
 
 
 {% block content %}
 <!--<iframe width="500" height="500" src="https://proyecto-tfg.glitch.me/"></iframe>-->
   <div class="row">
+    {% if seleccion_casa %}
     <form id="form_seleccion_casa" class="col s6">
     {% csrf_token %}
       <div class="input-field col s12">
@@ -25,8 +26,26 @@
         <select id="habitacion_seleccionada" name="habitacion_seleccionada">
             <option disabled selected value>Selecciona una habitacion</option>
         </select>
+        <button class="waves-effect waves-light btn" type="submit">Seleccionar</button>
+        <button class="waves-effect waves-light btn fin_edicion" type="button">salir de la edicion</button>
       </div>
     </form>
+    {% else %}
+    <form id="form_seleccion_habitacion" class="col s6">
+    {% csrf_token %}
+      <div id="div_habitaciones" class="input-field col s12">
+        <select id="habitacion_seleccionada" name="habitacion_seleccionada">
+            <option disabled selected value>Selecciona una estancia</option>
+             {% for habitacion in habitaciones %}
+                <option value="{{habitacion}}">{{habitacion}}</option>
+            {% endfor %}
+        </select>
+        <button class="waves-effect waves-light btn" type="submit">Seleccionar</button>
+        <button class="waves-effect waves-light btn fin_edicion" type="button">salir de la edicion</button>
+        <input type='hidden' id='casa_seleccionada_2' name='casa_seleccionada_2' value='{{casa}}'>
+      </div>
+    </form>
+    {% endif %}
   </div>
   <div class="row"></div>
   <div style="visibility:hidden;" id="div_iframe" class="row">
@@ -59,9 +78,9 @@
             <input placeholder="Coord Z Rotation" id="coord_z_r" name="coord_z_r" type="text" required>
         </div>
         <div class="input-field col s3">
-            <select id="habitacion_seleccionada_2" name="habitacion_seleccionada_2">
-                <option disabled selected value>Seleccione un enlace</option>
-            </select>
+        <select id="habitacion_seleccionada_2" name="habitacion_seleccionada_2">
+            <option disabled selected value>Selecciona una estancia</option>
+        </select>
         </div>
         <div class="input-field col s3">
             <button id="guardar_coords" class="waves-effect waves-light btn" type="submit">Guardar</button>

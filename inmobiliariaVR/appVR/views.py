@@ -52,10 +52,18 @@ class FileUploadView(View):
                 nueva_habitacion.save()
                 data["creada"] = True
                 data['message'] = 'Casa creada correctamente'
+                data["casa_creada"] = request.POST["nombre_casa"]
             else:
                 data["creada"] = False
                 data['message'] = 'Error al procesar las habitaciones'
                 return JsonResponse(data)
+
+        casas = Casa.objects.all()
+        lista_casas = []
+        for casa in casas:
+            lista_casas.append(casa.nombre_casa)
+
+        data["casas"] = lista_casas
 
         return JsonResponse(data)
 
@@ -104,4 +112,22 @@ class SaveButton(View):
             data["mensaje"] = "Boton creado correctamente"
             data["creado"] = True
 
+        return JsonResponse(data)
+
+class DeleteHouse(View):
+    @staticmethod
+    def post(request):
+        data = {}
+        casa = request.POST.get('seleccion', '')
+        print(casa)
+        Casa.objects.filter(nombre_casa=casa).delete()
+        ImagenesHabitaciones.objects.filter(nombre_casa=casa).delete()
+        BotonLink.objects.filter(nombre_casa=casa).delete()
+        print("ASD")
+        casas = Casa.objects.all()
+        lista_casas = []
+        for casa in casas:
+            lista_casas.append(casa.nombre_casa)
+
+        data["casas"] = lista_casas
         return JsonResponse(data)

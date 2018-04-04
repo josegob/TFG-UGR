@@ -8,7 +8,12 @@ from django import template
 register = template.Library()
 
 def main_page(request):
-    return render(request, 'inmobiliariaVR/main_page.html')
+    lista_casas = []
+    casas = Casa.objects.all()
+    for casa in casas:
+        lista_casas.append(casa.nombre_casa)
+
+    return render(request, 'inmobiliariaVR/main_page.html', {'casas': lista_casas})
 
 
 def sample(request, path):
@@ -56,7 +61,6 @@ def sample_butons(request, path, casa, habitacion):
 
     array_contenedor = list(zip(array_links, array_nombres_botones, array_pos_x, array_pos_y, array_pos_z, array_rot_x, array_rot_y, array_rot_z,
                                 array_contadores, array_enlaces, array_nombe_habitaciones))
-    print(array_contenedor)
 
     return render(request, 'inmobiliariaVR/habitacion_previa.html', {'link': path, 'array_contenedor': array_contenedor, 'hab_actual': habitacion,
                                                                      'num': i})
@@ -70,6 +74,24 @@ def testing(request):
         lista_casas.append(a.nombre_casa)
     return render(request, 'inmobiliariaVR/testing_habitaciones.html', {'casas': lista_casas})
 
+def edicion_habitaciones(request, casa=None):
+    if casa == None:
+        lista_casas = []
+        c = Casa.objects.all()
+        for a in c:
+            lista_casas.append(a.nombre_casa)
+
+        return render(request, 'inmobiliariaVR/edicion_habitaciones.html', {'casas': lista_casas, 'seleccion_casa': True})
+
+    else:
+        lista_habitaciones = []
+        print(casa)
+        c = ImagenesHabitaciones.objects.filter(nombre_casa=casa)
+        for a in c:
+            print(a.nombre_habitacion)
+            lista_habitaciones.append(a.nombre_habitacion)
+
+        return render(request, 'inmobiliariaVR/edicion_habitaciones.html', {'habitaciones': lista_habitaciones, 'seleccion_casa': False, 'casa': casa})
 
 def previa(request):
 
@@ -87,6 +109,7 @@ class GetHabitaciones(View):
         data = {}
         habitaciones = []
         seleccionada = request.POST.get('casa_seleccionada', '')
+        print(seleccionada)
         if seleccionada == '':
             data["seleccionada"] = False
             data["mensaje"] = "Debe seleccionar una opcion de la lista"
@@ -104,6 +127,7 @@ class GetLinkHabitacion(View):
     @staticmethod
     def post(request):
         data = {}
+        habitaciones = []
 
         seleccionada = request.POST.get('habitacion_seleccionada', '')
 
@@ -112,14 +136,15 @@ class GetLinkHabitacion(View):
             data["mensaje"] = "Debe seleccionar una opcion de la lista"
             return JsonResponse(data, safe=False)
         else:
-            print(request.POST["casa_seleccionada_2"])
-            print(request.POST["habitacion_seleccionada"])
             c = ImagenesHabitaciones.objects.filter(nombre_casa=request.POST["casa_seleccionada_2"], nombre_habitacion=request.POST["habitacion_seleccionada"])
             for a in c:
                 data["seleccionada"] = True
                 data["link"] = a.get_download_link()
-
-            print(data["link"])
+            c = ImagenesHabitaciones.objects.filter(nombre_casa=request.POST["casa_seleccionada_2"])
+            for a in c:
+                print(a.nombre_habitacion)
+                habitaciones.append(a.nombre_habitacion)
+                data["habitaciones"] = habitaciones
 
         return JsonResponse(data, safe=False)
 

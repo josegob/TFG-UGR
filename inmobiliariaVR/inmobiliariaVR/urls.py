@@ -20,13 +20,15 @@ from django.conf.urls.static import static
 from django.conf import settings
 from . import views
 from .views import *
+from django.views.decorators.csrf import csrf_exempt
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^appVR/', include('appVR.urls')),
     url(r'^$', views.main_page, name='index'),
     url(r'^sample/(?P<path>.*)/$', views.sample, name='sample'),
-    url(r'^testing-habitaciones/$', views.testing, name='testing'),
+    url(r'^edicion-habitaciones/$', views.creacion_habitaciones, name='creacion_habitaciones'),
+    url(r'^edicion-habitaciones/(?P<casa>.*)/$', views.creacion_habitaciones, name='creacion_habitaciones'),
     url(r'^get-habitaciones/$', GetHabitaciones.as_view(), name='get_habitaciones'),
     url(r'^get-links/$', GetLinkHabitacion.as_view(), name='get_links'),
     url(r'^previa-habitaciones/$', views.previa, name='previa'),

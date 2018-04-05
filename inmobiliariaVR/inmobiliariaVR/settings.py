@@ -122,8 +122,14 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+JS_URL = 'inmobiliariaVR/static/js'
+JS_ROOT = os.path.join(BASE_DIR, 'inmobiliariaVR\static\js')
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+TEMPLATE_URL = '/templates/'
+TEMPLATE_ROOT = os.path.join(BASE_DIR, 'templates')
 
 TMP_URL = '/media/imagenes_botones'
 TMP_ROOT = os.path.join(BASE_DIR, 'media/imagenes_botones')

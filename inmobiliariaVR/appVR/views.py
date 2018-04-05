@@ -192,7 +192,6 @@ class GenerateZip(View):
     @staticmethod
     def post(request):
         data = {}
-        print(request.POST["habitacion"])
         if request.POST["habitacion"] == 'Selecciona una habitacion':
             data["aviso"] = "Debes seleccionar una habitacion"
             data["error"] = True

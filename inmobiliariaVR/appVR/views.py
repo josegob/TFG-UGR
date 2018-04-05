@@ -7,6 +7,12 @@ import tempfile
 import requests
 from django.conf import settings
 from django.core import files
+import os
+import zipfile
+from os.path import basename
+from django.http import HttpResponse
+
+
 
 # Create your views here.
 
@@ -71,6 +77,7 @@ class SaveButton(View):
     @staticmethod
     def post(request):
         data = {}
+        botones = []
         hab = request.POST.get('habitacion_seleccionada_2', '')
 
         if hab == '':
@@ -111,6 +118,17 @@ class SaveButton(View):
             nuevo_boton.save()
             data["mensaje"] = "Boton creado correctamente"
             data["creado"] = True
+            c = ImagenesHabitaciones.objects.filter(nombre_casa=request.POST["casa_seleccionada_3"], nombre_habitacion=request.POST["habitacion_select_2"])
+            for a in c:
+                data["link_habitacion"] = a.get_download_link()
+
+            data["casa_actual"] = request.POST["casa_seleccionada_3"]
+            data["habitacion_actual"] = request.POST["habitacion_select_2"]
+
+            c = BotonLink.objects.filter(nombre_casa=request.POST["casa_seleccionada_3"], nombre_habitacion=request.POST["habitacion_select_2"])
+            for a in c:
+                botones.append(a.nombre_boton)
+                data["botones"] = botones
 
         return JsonResponse(data)
 
@@ -119,15 +137,105 @@ class DeleteHouse(View):
     def post(request):
         data = {}
         casa = request.POST.get('seleccion', '')
-        print(casa)
         Casa.objects.filter(nombre_casa=casa).delete()
         ImagenesHabitaciones.objects.filter(nombre_casa=casa).delete()
         BotonLink.objects.filter(nombre_casa=casa).delete()
-        print("ASD")
         casas = Casa.objects.all()
         lista_casas = []
         for casa in casas:
             lista_casas.append(casa.nombre_casa)
 
         data["casas"] = lista_casas
+        return JsonResponse(data)
+
+class RotateView(View):
+    @staticmethod
+    def post(request):
+        data = {}
+        botones = BotonLink.objects.filter(nombre_casa=request.POST["casa"], nombre_habitacion=request.POST["habitacion"], nombre_boton=request.POST["boton"])
+
+        lista_coordenadas = []
+        for boton in botones:
+            lista_coordenadas.append(boton.coordenada_x_rotation)
+            lista_coordenadas.append(boton.coordenada_y_rotation)
+            lista_coordenadas.append(boton.coordenada_z_rotation)
+
+        data["coordenadas"] = lista_coordenadas
+
+        c = ImagenesHabitaciones.objects.filter(nombre_casa=request.POST["casa"], nombre_habitacion=request.POST["habitacion"])
+        for a in c:
+            data["link"] = a.get_download_link()
+
+        return JsonResponse(data)
+
+
+class Deletebutton(View):
+    @staticmethod
+    def post(request):
+        data = {}
+        casa = request.POST.get('seleccion', '')
+        BotonLink.objects.filter(nombre_boton=request.POST["boton"], nombre_casa=request.POST["casa"], nombre_habitacion=request.POST["habitacion"]).delete()
+        botones = BotonLink.objects.filter(nombre_casa=request.POST["casa"], nombre_habitacion=request.POST["habitacion"])
+        lista_botones = []
+        for boton in botones:
+            lista_botones.append(boton.nombre_boton)
+
+        c = ImagenesHabitaciones.objects.filter(nombre_casa=request.POST["casa"], nombre_habitacion=request.POST["habitacion"])
+        for a in c:
+            data["link"] = a.get_download_link()
+
+        data["botones"] = lista_botones
+        return JsonResponse(data)
+
+
+class GenerateZip(View):
+    @staticmethod
+    def post(request):
+        data = {}
+        print(request.POST["habitacion"])
+        if request.POST["habitacion"] == 'Selecciona una habitacion':
+            data["aviso"] = "Debes seleccionar una habitacion"
+            data["error"] = True
+            return JsonResponse(data)
+
+        if request.POST["HTML"] == 'False':
+            c = ImagenesHabitaciones.objects.filter(nombre_casa=request.POST["casa"], nombre_habitacion=request.POST["habitacion"])
+            for a in c:
+                data["link"] = a.get_download_link()
+
+        else:
+            imagenes_habitaciones = []
+            imagenes_botones = []
+            habitaciones = ImagenesHabitaciones.objects.filter(nombre_casa=request.POST["casa"])
+            botones = BotonLink.objects.filter(nombre_casa=request.POST["casa"])
+            for boton in botones:
+                imagenes_botones.append(boton.get_download_link())
+            for habitacion in habitaciones:
+                imagenes_habitaciones.append(habitacion.get_download_link())
+
+            ruta = settings.MEDIA_ROOT + '\casaVR.html'
+            with open(ruta, 'wb') as f:
+                f.write(bytearray(request.POST["data_html"], 'utf8'))
+
+            js_ruta_1 = settings.JS_ROOT + '\jquery.js'
+            js_ruta_2 = settings.JS_ROOT + '\materialize.js'
+            js_ruta_3 = settings.JS_ROOT + '\set-image.js'
+            js_ruta_4 = settings.JS_ROOT + '\custom.js'
+
+            with zipfile.ZipFile('FicherosVR' + '.zip', 'w') as myzip:
+                myzip.write(ruta, "\\" + basename(ruta))
+                myzip.write(js_ruta_1, "static\js\\" + basename(js_ruta_1))
+                myzip.write(js_ruta_2, "static\js\\" + basename(js_ruta_2))
+                myzip.write(js_ruta_3, "static\js\\" + basename(js_ruta_3))
+                myzip.write(js_ruta_4, "static\js\\" + basename(js_ruta_4))
+                for i in range(0, len(imagenes_habitaciones)):
+                    ruta = settings.MEDIA_ROOT + (imagenes_habitaciones[i])[6:]
+                    myzip.write(ruta, "media\\" + basename(ruta))
+                for i in range(0, len(imagenes_botones)):
+                    ruta = settings.TMP_ROOT + (imagenes_botones[i])[-22:]
+                    myzip.write(ruta, "media\imagenes_botones\\" + basename(ruta))
+
+            os.replace(settings.BASE_DIR + '\FicherosVR.zip', settings.MEDIA_ROOT + '\FicherosVR.zip')
+            data["enlace"] = '/media/FicherosVR.zip'
+
         return JsonResponse(data)

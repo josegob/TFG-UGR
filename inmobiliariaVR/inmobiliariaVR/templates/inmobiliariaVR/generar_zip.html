@@ -1,7 +1,7 @@
 {% extends "inmobiliariaVR/base.html" %}
 {% load staticfiles %}
 {% block title %}Inmobiliaria VR{% endblock %}
-{% block title_logo %}Inmobiliaria VR | Previa{% endblock %}
+{% block title_logo %}Inmobiliaria VR | Generar zip{% endblock %}
 
 {% block content %}
   <div class="row">
@@ -17,20 +17,15 @@
       <button class="waves-effect waves-light btn" type="submit">Seleccionar</button>
       </div>
     </form>
-    <form id="form_seleccion_habitacion_previa" class="col s6">
+    <form id="form_generar_zip" class="col s6">
     {% csrf_token %}
       <div style="visibility:hidden;" id="div_habitaciones" class="input-field col s12">
         <select id="habitacion_seleccionada" name="habitacion_seleccionada">
             <option disabled selected value>Selecciona una habitacion</option>
         </select>
-
+        <button class="waves-effect waves-light btn" type="submit">Generar zip</button>
+        <a style="visibility:hidden;" id="boton_descarga" class="waves-effect waves-light btn" download>Descargar ficheros</a>
       </div>
     </form>
-  </div>
-  <div class="row"></div>
-  <div style="visibility:hidden;" id="div_iframe" class="row">
-        <div class="col s6">
-          <iframe id="iframe_test" width="1000" height="500"></iframe>
-        </div>
   </div>
 {% endblock %}

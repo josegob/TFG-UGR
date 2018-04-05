@@ -43,7 +43,7 @@
        {% endfor %}
 
       <!-- Camera + cursor. -->
-      <a-entity id="camara" rotation-reader camera look-controls>
+      <a-entity id="camara" rotation-reader camera look-controls rotation="{{ x }} {{ y }} {{ z }}">
         <a-cursor cursor-reader id="cursor"
           animation__click="property: scale; startEvents: click; from: 0.1 0.1 0.1; to: 1 1 1; dur: 150"
           animation__fusing="property: fusing; startEvents: fusing; from: 1 1 1; to: 0.1 0.1 0.1; dur: 1500"

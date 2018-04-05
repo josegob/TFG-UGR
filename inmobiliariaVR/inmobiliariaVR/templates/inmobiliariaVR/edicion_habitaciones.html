@@ -1,7 +1,7 @@
 {% extends "inmobiliariaVR/base.html" %}
 {% load staticfiles %}
 {% block title %}Inmobiliaria VR{% endblock %}
-{% block title_logo %}Inmobiliaria VR | Edicion{% endblock %}
+{% block title_logo %}Inmobiliaria VR | Edicion {{casa}} {% endblock %}
 
 
 {% block content %}
@@ -49,9 +49,21 @@
   </div>
   <div class="row"></div>
   <div style="visibility:hidden;" id="div_iframe" class="row">
-        <div class="col s6">
-          <iframe id="iframe_test" width="1000" height="500"></iframe>
-        </div>
+    <div class="col s6">
+      <iframe id="iframe_test" width="1000" height="500"></iframe>
+    </div>
+      <table class="col s5 offset-s1">
+        <thead>
+          <tr>
+              <th>Nombre del boton</th>
+              <th>Ver</th>
+              <th>Eliminar</th>
+          </tr>
+        </thead>
+
+        <tbody id="tabla_botones">
+        </tbody>
+      </table>
   </div>
     <div style="visibility:hidden;" id="div_coordenadas" class="row">
       <form id="form_coordenadas" name="form_coordenadas" class="col s12">
@@ -89,5 +101,10 @@
         <div class="input-field col s3">
             <button id="coor_previas" class="waves-effect waves-light btn" type="button">Aceptar</button>
         </div>
+  </div>
+  <div style="visibility:hidden;" id="pantalla_completa" class="row">
+    <div class="col s6">
+      <button class="waves-effect waves-light btn" type="button"><a id="href_button" style="color:white;" href="https://www.google.es" target="_blank">Pantalla completa</a></button>
+    </div>
   </div>
 {% endblock %}

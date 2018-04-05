@@ -27,13 +27,13 @@ AFRAME.registerComponent('set-image', {
     el.addEventListener(data.on, function () {
       // Fade out image.
       var habitacion = data.src.substring(1);
+      habitacion = habitacion.replace('_',' ')
       $('#hab_actual').attr('name', habitacion);
       data.target.emit('set-image-fade');
       // Wait for fade to complete.
       setTimeout(function () {
         // Set image.
         var tope = ($("#hab_actual").val());
-
         for(var i = 0; i < tope; i++)
         {
             var tmp = $("#links"+i).attr('name');

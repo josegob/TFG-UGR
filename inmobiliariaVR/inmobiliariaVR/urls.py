@@ -26,14 +26,18 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^appVR/', include('appVR.urls')),
     url(r'^$', views.main_page, name='index'),
-    url(r'^sample/(?P<path>.*)/$', views.sample, name='sample'),
     url(r'^edicion-habitaciones/$', views.edicion_habitaciones, name='creacion_habitaciones'),
     url(r'^edicion-habitaciones/(?P<casa>.*)/$', views.edicion_habitaciones, name='creacion_habitaciones'),
     url(r'^get-habitaciones/$', GetHabitaciones.as_view(), name='get_habitaciones'),
     url(r'^get-links/$', GetLinkHabitacion.as_view(), name='get_links'),
-    url(r'^previa-habitaciones/$', views.previa, name='previa'),
+    url(r'^generar-zip/$', views.generar_zip, name='zip'),
     url(r'^sample-buttons/(?P<path>.*)/(?P<casa>.*)/(?P<habitacion>.*)/$', views.sample_butons, name='sample_buttons'),
+    url(r'^set-rotation/(?P<path>.*)/(?P<casa>.*)/(?P<habitacion>.*)/(?P<x>.*)/(?P<y>.*)/(?P<z>.*)/$', views.set_rotation, name='set_rotation'),
+
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 urlpatterns += static(settings.TMP_URL, document_root=settings.TMP_ROOT)
+urlpatterns += static(settings.TEMPLATE_URL, document_root=settings.TEMPLATE_URL)
+urlpatterns += static(settings.JS_URL, document_root=settings.JS_URL)
+urlpatterns += static(settings.ZIP_URL, document_root=settings.ZIP_URL)

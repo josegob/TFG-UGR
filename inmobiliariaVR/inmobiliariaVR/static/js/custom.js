@@ -109,6 +109,7 @@ $( document ).ready(function(){
                     if(data.seleccionada)
                     {
                        $("#div_habitaciones").removeAttr("style");
+                       $("#div_zip").removeAttr("style");
                        $("#habitacion_seleccionada").append("<option disabled selected value>Selecciona una habitacion</option>");
                         for(i = 0; i < (data.habitaciones).length; i++)
                         {
@@ -132,7 +133,6 @@ $( document ).ready(function(){
     $("#form_seleccion_habitacion").on("submit", function(event){
         event.preventDefault();
         habitacion_select = $('#habitacion_seleccionada').parent(["0"]).children()[1].value;
-        console.log(habitacion_select);
         var form = $(this).closest("form");
         $('#habitacion_seleccionada_2').empty();
 
@@ -145,10 +145,11 @@ $( document ).ready(function(){
                     if(data.seleccionada)
                     {
                         $("#div_iframe").removeAttr("style");
+                        var value_casa = $("#casa_seleccionada_2").val();
                         $("#div_coordenadas").removeAttr("style");
-                        $("#form_coordenadas").append("<input type='hidden' id='casa_seleccionada_3' name='casa_seleccionada_3' value='"+casa_seleccionada+"'>");
-                        $("#form_coordenadas").append("<input type='hidden' id='habitacion_select_2' name='habitacion_select_2' value='"+habitacion_select+"'>");
-                        $("#iframe_test").attr('src', 'http://127.0.0.1:8000/sample/'+data.link);
+                        $("#form_coordenadas").append("<input type='hidden' id='casa_seleccionada_3' name='casa_seleccionada_3' value='"+data.casa_actual+"'>");
+                        $("#form_coordenadas").append("<input type='hidden' id='habitacion_select_2' name='habitacion_select_2' value='"+data.habitacion_actual+"'>");
+                        $("#iframe_test").attr('src', 'http://127.0.0.1:8000/sample-buttons/'+data.link+'/'+data.casa_actual+'/'+data.habitacion_actual);
 
                         $("#habitacion_seleccionada_2").append("<option disabled selected value>Selecciona una habitacion</option>");
                         for(i = 0; i < (data.habitaciones).length; i++)
@@ -156,6 +157,18 @@ $( document ).ready(function(){
                             $("#habitacion_seleccionada_2").append("<option value='"+data.habitaciones[i]+"'>"+data.habitaciones[i]+"</option>");
                             $('select').material_select();
                         }
+
+                        $("#tabla_botones").empty();
+                        for(i = 0; i < (data.botones).length; i++)
+                        {
+                            $("#tabla_botones").append("<tr><td>"+data.botones[i]+"</td><td name='"+data.botones[i]+"'><button id='ver' class='btn waves-effect waves-light boton_tabla_edicion'>Ver</button></td><td name='"+data.botones[i]+"'><button id='eliminar' class='btn waves-effect waves-light boton_tabla_edicion'>Eliminar</button></td></tr>");
+                            $( ".boton_tabla_edicion" ).on( "click", botonTablaEdicion );
+                            $("#tabla_botones").append("<input type='hidden' id='casa' value='"+data.casa_actual+"'>");
+                            $("#tabla_botones").append("<input type='hidden' id='habitacion' value='"+data.habitacion_actual+"'>");
+                        }
+
+                        $("#pantalla_completa").removeAttr("style");
+                        $("#href_button").attr('href', 'http://127.0.0.1:8000/sample-buttons/'+data.link+'/'+data.casa_actual+'/'+data.habitacion_actual);
 
                     }
                     else
@@ -193,8 +206,16 @@ $( document ).ready(function(){
                 success: function (data) {;
                     if(data.creado)
                     {
+                        $("#tabla_botones").empty();
+                        for(i = 0; i < (data.botones).length; i++)
+                        {
+                            $("#tabla_botones").append("<tr><td>"+data.botones[i]+"</td><td name='"+data.botones[i]+"'><button id='ver' class='btn waves-effect waves-light boton_tabla_edicion'>Ver</button></td><td name='"+data.botones[i]+"'><button id='eliminar' class='btn waves-effect waves-light boton_tabla_edicion'>Eliminar</button></td></tr>");
+                            $( ".boton_tabla_edicion" ).on( "click", botonTablaEdicion );
+                            $("#tabla_botones").append("<input type='hidden' id='casa' value='"+data.casa_actual+"'>");
+                            $("#tabla_botones").append("<input type='hidden' id='habitacion' value='"+data.habitacion_actual+"'>");
+                        }
                         $('#form_coordenadas')[0].reset();
-                        alert(data.mensaje);
+                        $("#iframe_test").attr('src', 'http://127.0.0.1:8000/sample-buttons/'+data.link_habitacion+'/'+data.casa_actual+'/'+data.habitacion_actual);
                     }
                     else
                     {
@@ -204,33 +225,6 @@ $( document ).ready(function(){
         });
 
 
-    });
-
-    $("#form_seleccion_habitacion_previa").on("submit", function(event){
-        event.preventDefault();
-        var form = $(this).closest("form");
-        habitacion_select = $('#habitacion_seleccionada').val();
-
-        $.ajax({
-            type: "POST",
-            url: "/get-links/",
-            data: form.serialize(),
-            dataType: 'json',
-                success: function (data) {;
-                    if(data.seleccionada)
-                    {
-                        $("#div_iframe").removeAttr("style");
-                        $("#pantalla_completa").removeAttr("style");
-                        $("#iframe_test").attr('src', 'http://127.0.0.1:8000/sample-buttons/'+data.link+'/'+casa_seleccionada+'/'+habitacion_select);
-                        $("#href_button").attr('href', 'http://127.0.0.1:8000/sample-buttons/'+data.link+'/'+casa_seleccionada+'/'+habitacion_select);
-
-                    }
-                    else
-                    {
-                        alert(data.mensaje)
-                    }
-                }
-        });
     });
 
     function botonTabla() {
@@ -261,13 +255,99 @@ $( document ).ready(function(){
       }
     }
 
+
     $( ".boton_tabla" ).on( "click", botonTabla );
     $( ".fin_edicion" ).click(function() {
       window.location.replace("/");
     });
 
-    //var d = ($("#iframe_test").attr('src')
-    //var asd = $.get(d);
-    //asd.responseText;
+    function botonTablaEdicion() {
+
+      var casa = $("#tabla_botones > #casa").val();
+      var habitacion = $("#tabla_botones > #habitacion").val();
+      var accion = ($(this).attr('id'));
+      var boton = (($(this).closest("td")).attr('name'));
+
+      if (accion == 'ver')
+      {
+        $.ajax({
+            type: "POST",
+            url: "/appVR/rotar-vista/",
+            data: {casa: casa, habitacion: habitacion, boton:boton},
+            dataType: 'json',
+                success: function (data) {;
+                    var link = $("#iframe_test");
+                    //console.log($("a-entity").attr('data-src'));
+                    //$('[data-src="ElementNameHere"]')
+                    //$('[data-src="#pasillo"]').val($("#coordenadas", link.contents()).attr('rotation_x'));
+                    //console.log($('[data-src="#pasillo"]', link.contents()).attr('name'));
+                    $("#iframe_test").attr('src', 'http://127.0.0.1:8000/set-rotation/'+data.link+'/'+casa+'/'+habitacion+'/'+data.coordenadas[0]+'/'+data.coordenadas[1]+'/'+data.coordenadas[2]);
+                }
+        });
+      }
+      else
+      {
+        $.ajax({
+            type: "POST",
+            url: "/appVR/eliminar-boton/",
+            data: {casa: casa, habitacion: habitacion, boton:boton},
+            dataType: 'json',
+                success: function (data) {;
+                    $("#tabla_botones").empty();
+                    for(i = 0; i < (data.botones).length; i++)
+                    {
+                        $("#tabla_botones").append("<tr><td>"+data.botones[i]+"</td><td name='"+data.botones[i]+"'><button id='ver' class='btn waves-effect waves-light boton_tabla_edicion'>Ver</button></td><td name='"+data.botones[i]+"'><button id='eliminar' class='btn waves-effect waves-light boton_tabla_edicion'>Eliminar</button></td></tr>");
+                        $( ".boton_tabla_edicion" ).on( "click", botonTablaEdicion );
+                        $("#tabla_botones").append("<input type='hidden' id='casa' value='"+casa+"'>");
+                        $("#tabla_botones").append("<input type='hidden' id='habitacion' value='"+habitacion+"'>");
+                    }
+
+                    $("#iframe_test").attr('src', 'http://127.0.0.1:8000/sample-buttons/'+data.link+'/'+casa+'/'+habitacion);
+                }
+        });
+      }
+
+    }
+
+    $( ".boton_tabla_ver" ).on( "click", botonTablaEdicion );
+
+
+    $("#form_generar_zip").on("submit", function(event){
+        event.preventDefault();
+        habitacion_zip = $('#habitacion_seleccionada').parent(["0"]).children()[1].value;
+        casa_zip = $('#casa_seleccionada_2').val();
+
+        $.ajax({
+            type: "POST",
+            url: "/appVR/generar-zip/",
+            data: {casa: casa_zip, habitacion: habitacion_zip, HTML: 'False'},
+            dataType: 'json',
+                success: function (data) {;
+                    if(data.error)
+                        alert(data.aviso);
+                    else
+                    {
+                        $.ajax({
+                            type: "GET",
+                            url: 'http://127.0.0.1:8000/sample-buttons/'+data.link+'/'+casa_zip+'/'+habitacion_zip,
+                                success: function (data) {;
+                                    $.ajax({
+                                        type: "POST",
+                                        url: "/appVR/generar-zip/",
+                                        data: {casa: casa_zip, habitacion: habitacion_zip, HTML: 'True', data_html: data},
+                                        dataType: 'json',
+                                            success: function (data) {;
+                                                $("#boton_descarga").removeAttr("style");
+                                                $("#boton_descarga").attr('href', data.enlace)
+
+                                            }
+                                    });
+                                }
+                        });
+                    }
+
+                }
+        });
+    });
 
 });

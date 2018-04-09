@@ -8,14 +8,14 @@
 
       <a-assets>
         {% for elemento in array_contenedor %}
-          <img id="{{ elemento.1 }}-thumb" crossorigin="anonymous" src="{{ elemento.0 }}">
+          <img name="links{{ elemento.8 }}" id="{{ elemento.1 }}-thumb" crossorigin="anonymous" src="{{ elemento.0 }}">
           <img id="{{ elemento.1 }}" crossorigin="anonymous" src="{{ elemento.9 }}">
          {% endfor %}
         <audio id="click-sound" crossorigin="anonymous" src="https://cdn.aframe.io/360-image-gallery-boilerplate/audio/click.ogg"></audio>
 
         <!-- Image link template to be reused. -->
         <script id="link" type="text/html">
-          <a-entity aaa class="link"
+          <a-entity class="link"
             geometry="primitive: plane; height: 1; width: 1"
             material="shader: flat; src: ${thumb}"
             event-set__1="_event: mousedown; scale: 1 1 1"

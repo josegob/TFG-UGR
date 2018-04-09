@@ -8,7 +8,32 @@
 var rotation = new THREE.Vector3();
 var position = new THREE.Vector3();
 var distance = 8.0;
+var widthFijo = 138;
 
+$( document ).ready(function(){
+    var elem = ($("#hab_actual").val());
+    var array_tamanios = new Array();
+
+    for(var i = 0; i < elem; i++)
+    {
+        var enlace = $('[name="links'+i+'"]').attr('src');
+        $('<img src="'+ enlace +'" name="links'+i+'">').load(function() {
+                var img = this;
+                array_tamanios.push(Math.round(img.naturalWidth/widthFijo));
+
+        });
+
+    }
+
+    $(window).on("load", function() {
+        for(var i = 0; i < elem; i++)
+        {
+            $("#links"+i+" > a-entity > .link").attr('geometry', 'primitive: plane; height: 1; width: '+array_tamanios[i]+'');
+        }
+
+    });
+    console.log(array_tamanios);
+});
 
 AFRAME.registerComponent('set-image', {
   schema: {

@@ -212,31 +212,31 @@ class GenerateZip(View):
             for habitacion in habitaciones:
                 imagenes_habitaciones.append(habitacion.get_download_link())
 
-            ruta = settings.MEDIA_ROOT + '\casaVR.html'
+            ruta = settings.MEDIA_ROOT + '/casaVR.html'
             with open(ruta, 'wb') as f:
                 f.write(bytearray(request.POST["data_html"], 'utf8'))
 
-            js_ruta_1 = settings.JS_ROOT + '\jquery.js'
-            js_ruta_2 = settings.JS_ROOT + '\materialize.js'
-            js_ruta_3 = settings.JS_ROOT + '\set-image.js'
-            js_ruta_4 = settings.JS_ROOT + '\custom.js'
+            js_ruta_1 = settings.JS_ROOT + '/jquery.js'
+            js_ruta_2 = settings.JS_ROOT + '/materialize.js'
+            js_ruta_3 = settings.JS_ROOT + '/set-image.js'
+            js_ruta_4 = settings.JS_ROOT + '/custom.js'
 
             with zipfile.ZipFile('FicherosVR' + '.zip', 'w') as myzip:
-                myzip.write(ruta, "\\" + basename(ruta))
-                myzip.write(js_ruta_1, "\\static\js\\" + basename(js_ruta_1))
-                myzip.write(js_ruta_2, "\\static\js\\" + basename(js_ruta_2))
-                myzip.write(js_ruta_3, "\\static\js\\" + basename(js_ruta_3))
-                myzip.write(js_ruta_4, "\\static\js\\" + basename(js_ruta_4))
-                print("\\static\js\\" + basename(js_ruta_4))
+                myzip.write(ruta, basename(ruta))
+                myzip.write(js_ruta_1, "/static/js/" + basename(js_ruta_1))
+                myzip.write(js_ruta_2, "/static/js/" + basename(js_ruta_2))
+                myzip.write(js_ruta_3, "/static/js/" + basename(js_ruta_3))
+                myzip.write(js_ruta_4, "/static/js/" + basename(js_ruta_4))
                 for i in range(0, len(imagenes_habitaciones)):
                     ruta = settings.MEDIA_ROOT + (imagenes_habitaciones[i])[6:]
-                    myzip.write(ruta, "\\media\\" + basename(ruta))
+                    myzip.write(ruta, "/media/" + basename(ruta))
                 for i in range(0, len(imagenes_botones)):
                     ruta = settings.TMP_ROOT + (imagenes_botones[i])[-22:]
-                    myzip.write(ruta, "\\media\imagenes_botones\\" + basename(ruta))
+                    myzip.write(ruta, "/media/imagenes_botones/" + basename(ruta))
 
-            os.replace(settings.BASE_DIR + '\FicherosVR.zip', settings.MEDIA_ROOT + '\FicherosVR.zip')
+            os.replace(settings.BASE_DIR + '/FicherosVR.zip', settings.MEDIA_ROOT + '/FicherosVR.zip')
             data["enlace"] = '/media/FicherosVR.zip'
 
-
         return JsonResponse(data)
+
+

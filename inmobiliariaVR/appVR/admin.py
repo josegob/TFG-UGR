@@ -9,5 +9,5 @@ from appVR.models import ImagenesHabitacionesAdmin
 
 admin.site.register(Casa, CasasAdmin)
 admin.site.register(BotonLink)
-
+admin.site.register(ImagenesHabitaciones, ImagenesHabitacionesAdmin)
 

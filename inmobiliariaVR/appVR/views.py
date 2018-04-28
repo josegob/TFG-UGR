@@ -91,7 +91,7 @@ class SaveButton(View):
         for a in enlace:
             link = a.get_download_link()
 
-        if (BotonLink.objects.filter(nombre_boton=request.POST["nombre_boton"].lower(), nombre_habitacion=request.POST["habitacion_select_2"].lower())).count() > 0:
+        if (BotonLink.objects.filter(nombre_casa=request.POST["casa_seleccionada_3"], nombre_boton=request.POST["nombre_boton"].lower(), nombre_habitacion=request.POST["habitacion_select_2"].lower())).count() > 0:
             data["mensaje"] = "Ya existe un boton con ese nombre para esta habitacion"
             data["creado"] = False
             return JsonResponse(data)
@@ -231,7 +231,7 @@ class GenerateZip(View):
                     ruta = settings.MEDIA_ROOT + (imagenes_habitaciones[i])[6:]
                     myzip.write(ruta, "/media/" + basename(ruta))
                 for i in range(0, len(imagenes_botones)):
-                    ruta = settings.TMP_ROOT + (imagenes_botones[i])[-22:]
+                    ruta = settings.TMP_ROOT + (imagenes_botones[i])[-23:]
                     myzip.write(ruta, "/media/imagenes_botones/" + basename(ruta))
 
             os.replace(settings.BASE_DIR + '/FicherosVR.zip', settings.MEDIA_ROOT + '/FicherosVR.zip')

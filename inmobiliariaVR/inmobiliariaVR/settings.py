@@ -131,5 +131,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 TEMPLATE_URL = '/templates/'
 TEMPLATE_ROOT = os.path.join(BASE_DIR, 'templates')
 
-TMP_URL = '/media/imagenes_botones'
-TMP_ROOT = os.path.join(BASE_DIR, 'media/imagenes_botones')
+TMP_URL = '/media/imagenes_botones/'
+TMP_ROOT = os.path.join(BASE_DIR, 'media/imagenes_botones/')

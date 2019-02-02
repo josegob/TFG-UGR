@@ -6,7 +6,7 @@ Resumen: El proyecto abordará la creación así como la edición de imágenes d
 
 [Enlace a la Memoria](https://github.com/josegob/TFG-UGR/blob/master/Memoria%20TFG.pdf)
 
-## Title: Virtual Reality in Real Estate
+## Title: Virtual Reality with 360º photographs in Real Estate
 
 Abstract: The project will be dealing with the creation as well as the edition of 360o images of rooms in a house. Subsequently, the images will be uploaded into a Web App intended for use by real estate agencies. The aim is to make it possible that potential clients have access to virtual-reality visits so that they gain an insight of what the house looks like before -or instead of- visiting the house, which would safe time for both the agents and their clients. Therefore, this project will provide real estate sellers with a platform that allows them to create a virtual tour of available properties, by means of just 360o pictures.
 
